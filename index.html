@@ -18,8 +18,8 @@
 
 		/** @prepare */
 		let Y = prompt('', new Date().getFullYear());
-		//files = [Y + 'CH1A.CSV', Y + 'CH2A.CSV', Y + 'CH3A.CSV', Y + 'CH4A.CSV', Y + 'CH5A.CSV'];
-		files = ['https://cdn.jsdelivr.net/gh/highcharts/highcharts@v7.0.0/samples/data/analytics.csv', 'https://cdn.jsdelivr.net/gh/highcharts/highcharts@v7.0.0/samples/data/analytics.csv'];
+		files = [Y + 'CH1A.CSV', Y + 'CH2A.CSV', Y + 'CH3A.CSV', Y + 'CH4A.CSV', Y + 'CH5A.CSV'];
+		//files = ['https://cdn.jsdelivr.net/gh/highcharts/highcharts@v7.0.0/samples/data/analytics.csv', 'https://cdn.jsdelivr.net/gh/highcharts/highcharts@v7.0.0/samples/data/analytics.csv'];
 		Promise.all(
 			files.map(url => new Promise((resolve) => Papa.parse(url, {
 				download: true,
@@ -30,8 +30,8 @@
 				skipEmptyLines: true,
 				dynamicTyping: true,
 				before: b => { document.title = 'Loading ...' },
-				//complete: padata => resolve(padata.data.map(col => [Date.parse(col.Time), col['Temperature(C)']]).filter(val => val[0]).sort((a, b) => a[0].toString().localeCompare(b[0].toString(), undefined, { numeric: true }));
-				complete: paData => resolve(paData.data.map(col => [Date.parse(col['Day Index']), parseFloat(col['Users'], 10)]).filter(val => val[0]).sort((a, b) => a[0].toString().localeCompare(b[0].toString(), undefined, { numeric: true })))
+				complete: padata => resolve(padata.data.map(col => [Date.parse(col.Time), col['Temperature(C)']]).filter(val => val[0]).sort((a, b) => a[0].toString().localeCompare(b[0].toString(), undefined, { numeric: true }));
+				//complete: paData => resolve(paData.data.map(col => [Date.parse(col['Day Index']), parseFloat(col['Users'], 10)]).filter(val => val[0]).sort((a, b) => a[0].toString().localeCompare(b[0].toString(), undefined, { numeric: true })))
 			}
 			)))
 		).then(res => {
