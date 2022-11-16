@@ -30,7 +30,7 @@
 				skipEmptyLines: true,
 				dynamicTyping: true,
 				before: b => { document.title = 'Loading ...' },
-				complete: padata => resolve(padata.data.map(col => [Date.parse(col.Time), col['Temperature(C)']]).filter(val => val[0]).sort((a, b) => a[0].toString().localeCompare(b[0].toString(), undefined, { numeric: true }));
+				complete: padata => resolve(padata.data.map(col => [Date.parse(col.Time), col['Temperature(C)']]).filter(val => val[0]).sort((a, b) => a[0].toString().localeCompare(b[0].toString(), undefined, { numeric: true })))
 				//complete: paData => resolve(paData.data.map(col => [Date.parse(col['Day Index']), parseFloat(col['Users'], 10)]).filter(val => val[0]).sort((a, b) => a[0].toString().localeCompare(b[0].toString(), undefined, { numeric: true })))
 			}
 			)))
