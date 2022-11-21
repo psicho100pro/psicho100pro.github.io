@@ -1,25 +1,22 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 	<meta charset="utf-8">
 	<link rel="shortcut icon"
 		href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 -6 18 1'><text id=''>°C</text></svg>"
 		type="image/svg+xml">
-	<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.1.js" crossorigin="anonymous"
-		referrerpolicy="no-referrer"></script>
+
 	<script type="text/javascript" src="https://code.highcharts.com/stock/highstock.js" crossorigin="anonymous"
 		referrerpolicy="no-referrer"></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.js"
 		crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <script>
-	$(() => {
-		$('#graf').css({ 'min-width': 575, 'max-width': 1200, 'min-height': 575, 'margin': '0 auto' })
-
+	window.onload = () => {
 		/** @prepare */
 		let Y = prompt('', new Date().getFullYear());
 		files = [Y + 'CH1A.CSV', Y + 'CH2A.CSV', Y + 'CH3A.CSV', Y + 'CH4A.CSV', Y + 'CH5A.CSV'];
-		//files = ['https://cdn.jsdelivr.net/gh/highcharts/highcharts@v7.0.0/samples/data/analytics.csv', 'https://cdn.jsdelivr.net/gh/highcharts/highcharts@v7.0.0/samples/data/analytics.csv'];
 		Promise.all(
 			files.map(url => new Promise((resolve) => Papa.parse(url, {
 				download: true,
@@ -31,14 +28,12 @@
 				dynamicTyping: true,
 				before: b => { document.title = 'Loading ...' },
 				complete: padata => resolve(padata.data.map(col => [Date.parse(col.Time), col['Temperature(C)']]).filter(val => val[0]).sort((a, b) => a[0].toString().localeCompare(b[0].toString(), undefined, { numeric: true })))
-				//complete: paData => resolve(paData.data.map(col => [Date.parse(col['Day Index']), parseFloat(col['Users'], 10)]).filter(val => val[0]).sort((a, b) => a[0].toString().localeCompare(b[0].toString(), undefined, { numeric: true })))
 			}
 			)))
 		).then(res => {
 			document.title = 'Weather station';
 			init_graph(res[0], res[1], res[2], res[3], res[4])
 		}).catch(err => console.warn('Something went wrong:', err));
-
 		/** @graf_sets 	*/
 		Highcharts.setOptions({
 			chart: {
@@ -62,9 +57,6 @@
 				enabled: true,
 				maskFill: 'rgba(102,133,194,0.3)',
 				handles: {
-					events: {
-						click: ''
-					},
 					backgroundColor: '#FF0',
 					borderColor: '#F00'
 				},
@@ -79,6 +71,19 @@
 				crosshair: {
 					snap: false
 				}
+			},
+			yAxis: {
+				title: {
+					align: 'high',
+					offset: 5,
+					text: '°C',
+					rotation: 0,
+					y: 20
+				},
+				offset: 0,
+				minorTickInterval: 'auto',
+				startOnTick: false,
+				opposite: false,
 			}
 		});
 		/** @object_sets */
@@ -112,10 +117,6 @@
 					},
 					shadow: true
 				},
-				chart: {
-					events: {
-					}
-				},
 				rangeSelector: {
 					verticalAlign: 'bottom',
 					y: -56,
@@ -138,55 +139,22 @@
 					inputEditDateFormat: '%d.%m.%Y'
 				},
 				yAxis: [{
-					title: {
-						align: 'high',
-						offset: 5,
-						text: '°C',
-						rotation: 0,
-						y: 20
-					},
-					resize: {
-						enabled: true
-					},
-					offset: 0,
-					minorTickInterval: 'auto',
-					startOnTick: false,
-					opposite: false,
 					height: '40%',
 				}, {
-					title: {
-						align: 'high',
-						offset: 5,
-						text: '°C',
-						rotation: 0,
-						y: 20
-					},
-					offset: 0,
-					minorTickInterval: 'auto',
-					startOnTick: false,
-					opposite: false,
 					top: '41%',
 					height: '30%',
 				}, {
-					title: {
-						align: 'high',
-						offset: 5,
-						text: '°C',
-						rotation: 0,
-						y: 20
-					},
-					offset: 0,
-					minorTickInterval: 'auto',
-					startOnTick: false,
-					opposite: false,
 					top: '70%',
 					height: '30%',
 				}],
 				plotOptions: {
 					areaspline: {
-						color: '#c4392d',
-						negativeColor: '#5679c4',
+						color: '#C4392D',
+						negativeColor: '#5679C4',
 						fillOpacity: 0.5,
+					},
+					line: {
+						lineWidth: 1
 					}
 				},
 				tooltip: {
@@ -201,33 +169,31 @@
 				}, {
 					yAxis: 1,
 					color: '#AD0597',
-					lineWidth: 1,
 					name: 'living room',
 					data: obyvak,
 				}, {
 					yAxis: 1,
 					color: '#8AE22B ',
-					lineWidth: 1,
 					name: "children's room",
 					data: pokoj,
 				}, {
 					yAxis: 2,
 					color: '#AD0597',
-					lineWidth: 1,
 					name: 'bedroom',
 					data: loznice,
 				}, {
 					yAxis: 2,
 					color: '#8AE22B ',
-					lineWidth: 1,
 					name: 'kitchen',
 					data: kuchyn,
 				}]
 			});
 		};
-	});
+	};
 </script>
+
 <body>
-	<div id="graf"></div>
+	<div id="graf" style="min-width:575px; max-width: 1200px; min-height: 575px; margin: 0px auto"></div>
 </body>
+
 </html>
